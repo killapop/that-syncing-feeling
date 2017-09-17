@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle that-syncing-feeling",
+        "command": "that-syncing-feeling:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "that-syncing-feeling",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "that-syncing-feeling:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

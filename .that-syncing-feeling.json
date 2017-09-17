@@ -1,0 +1,24 @@
+{
+  "path": "./media/",
+  "ssh_key": "/home/allan/.ssh/id_pub.rsa",
+  "remotes": [
+    {
+      "name": "staging",
+      "host": "xray.tacticaltech.org",
+      "user": "ttc_stg",
+      "path": "/srv/data/ttc_stg/media/"
+    },
+    {
+      "name": "production-blitz",
+      "host": "blitz.tacticaltech.org",
+      "user": "ttc_prd",
+      "path": "/srv/data/ttc_prd/media/"
+    },
+    {
+      "name": "production-lucky",
+      "host": "lucky.tacticaltech.org",
+      "user": "ttc_prd",
+      "path": "/srv/data/ttc_prd/media/"
+    }
+  ]
+}
