@@ -39,3 +39,10 @@ module.exports = ThatSyncingFeeling =
     else
       @createViews()
       @thatSyncingFeelingView.attach()
+
+  config:
+    title: "Panel position"
+    description: "Position of the panel(left or right)"
+    default: 'right'
+    type: 'string'
+    enum: ['right', 'left']

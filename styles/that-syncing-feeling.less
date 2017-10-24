@@ -2,7 +2,64 @@
 //
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
-@import "ui-variables";
+@import 'ui-variables';
 
 .that-syncing-feeling {
+}
+.remote {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  min-height: 50px;
+  min-width: 300px;
+  margin: 0 auto 20px 0;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  .details {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    strong {
+      font-size: 13px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      flex-grow: 0;
+    }
+    button {
+      flex-grow: 0;
+      margin-right: 10px;
+      opacity: 0.8;
+    }
+    em {
+      flex-grow: 3;
+      width: 100%;
+    }
+  }
+  .actions {
+    display: flex;
+
+    .btn {
+      background-color: rgba(0, 0, 0, 0.1);
+      background-image: initial;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-weight: bold;
+      box-sizing: initial;
+      display: flex;
+      flex-direction: column;
+      height: 50px;
+      width: 30px;
+      align-items: center;
+      justify-content: center;
+      margin-right: 5px;
+      &.upload {
+        color: #2bda77;
+      }
+      &.download {
+        color: #ff982d;
+      }
+      &[disabled] {
+        color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
 }
