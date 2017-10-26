@@ -10,10 +10,8 @@ filePath = path.join cwd, '.that-syncing-feeling.json'
 try fs.readFileSync filePath
 catch err
   e = if err.code == "ENOENT" then "The project does not have a .that-syncing-feeling.json file to define the remotes. Please refer the documentation" else err
-  console.log e
   throw e
 unless err?
-  console.log "no errors"
   conf = JSON.parse fs.readFileSync filePath
   remotes = conf.remotes
 
@@ -24,14 +22,17 @@ runShell = (cmd) ->
 
 class RemoteItem extends View
   @content: (remoteState) ->
-    @div class: 'remote', =>
+    @div class: "remote", outlet: "#{remoteState.name}", =>
       @div class: 'details', =>
-        @button class: "btn btn-info icon refresh icon-sync", click: 'checkFiles'
         @strong remoteState.name
         @em remoteState.host
       @div class: 'actions', =>
-        @button class: "btn icon upload icon-cloud-upload", disabled: 'true', title: "upload to #{remoteState.name}", outlet: 'uploadButton', click: 'syncUp'
-        @button class: 'btn icon download icon-cloud-download', disabled: 'true', title: "download from #{remoteState.name}", outlet: 'downloadButton', click: 'syncDown'
+        @button class: "btn btn-info refresh", click: 'checkFiles', =>
+          @span "check status"
+        @button class: "btn btn-success upload", disabled: 'true', title: "upload to #{remoteState.name}", outlet: 'uploadButton', click: 'syncUp', =>
+          @span "upload"
+        @button class: 'btn btn-warning download', disabled: 'true', title: "download from #{remoteState.name}", outlet: 'downloadButton', click: 'syncDown', =>
+          @span "download"
 
   initialize: (remoteState) ->
     @remoteState = remoteState
@@ -43,14 +44,14 @@ class RemoteItem extends View
     return "#{remoteState.user}@#{remoteState.host}:#{remoteState.path}"
 
   checkFiles: () ->
-    cmdUp = "rsync -rvnc --delete #{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep -v ^delet | wc -l"
-    cmdDown = "rsync -rvnc --delete #{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep ^delet | wc -l"
+    cmdUp = "rsync -rvnc --delete #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep -v ^delet | wc -l"
+    cmdDown = "rsync -rvnc --delete #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep ^delet | wc -l"
     newState = _.merge(@remoteState, {up: runShell(cmdUp) isnt 0, down: runShell(cmdDown) isnt 0})
     @downloadButton.prop("disabled", !@remoteState.down)
     @uploadButton.prop("disabled", !@remoteState.up)
 
   syncUp: () ->
-    cmd = "rsync -au --quiet --partial #{conf.path} -e ssh #{destinationPath(@remoteState)}"
+    cmd = "rsync -au --quiet --partial #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}"
     syncit = runShell(cmd, '')
     if syncit isnt NaN
       @checkFiles()
@@ -61,7 +62,7 @@ class RemoteItem extends View
     return
 
   syncDown: () ->
-    cmd = "rsync -au --quiet --partial -e ssh #{destinationPath(@remoteState)} #{conf.path}"
+    cmd = "rsync -au --quiet --partial -e ssh #{destinationPath(@remoteState)} #{cwd}/#{conf.path}"
     syncit = runShell(cmd, '')
     if syncit isnt NaN
       @checkFiles()
@@ -83,17 +84,5 @@ class RemotesList extends View
       else
         @div class: 'no-remotes', 'No remotes have been defined for this project.'
 
-
   initialize: () ->
     @remotesState = conf.remotes
-
-  destinationPath = (remote) ->
-    return "#{remote.user}@#{remote.host}:#{remote.path}"
-
-  # checkFiles = () ->
-  #   for remote in conf.remotes
-  #     destination = destinationPath(remote)
-  #     cmdUp = "rsync -rvnc --delete #{conf.path} -e ssh #{destination}| head -n -3 | tail -n +2 | grep -v ^delet | wc -l"
-  #     cmdDown = "rsync -rvnc --delete #{conf.path} -e ssh #{destination}| head -n -3 | tail -n +2 | grep ^delet | wc -l"
-  #     return _.merge(remote, {up: runShell(cmdUp) isnt 0, down: runShell(cmdDown) isnt 0})
-  #   console.log conf.remotes

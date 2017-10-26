@@ -8,6 +8,7 @@
 }
 .remote {
   display: flex;
+  flex-flow: column;
   justify-content: space-between;
   border: 1px solid rgba(255, 255, 255, 0.04);
   min-height: 50px;
@@ -20,7 +21,7 @@
     flex-flow: row wrap;
     align-items: flex-start;
     strong {
-      font-size: 13px;
+      font-size: 15px;
       text-transform: uppercase;
       margin-bottom: 5px;
       flex-grow: 0;
@@ -37,28 +38,17 @@
   }
   .actions {
     display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
 
     .btn {
-      background-color: rgba(0, 0, 0, 0.1);
-      background-image: initial;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      font-weight: bold;
-      box-sizing: initial;
-      display: flex;
-      flex-direction: column;
-      height: 50px;
-      width: 30px;
-      align-items: center;
-      justify-content: center;
-      margin-right: 5px;
-      &.upload {
-        color: #2bda77;
-      }
-      &.download {
-        color: #ff982d;
-      }
+      padding: 4px 6px;
+      height: initial;
+      line-height: initial;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      opacity: 0.7;
       &[disabled] {
-        color: rgba(255, 255, 255, 0.2);
+        opacity: 0.2;
       }
     }
   }
