@@ -1,24 +1,23 @@
 {
-  "path": "./media/",
-  "ssh_key": "/home/allan/.ssh/id_pub.rsa",
+  "path": "media/",
   "remotes": [
     {
-      "name": "staging",
-      "host": "xray.tacticaltech.org",
-      "user": "ttc_stg",
-      "path": "/srv/data/ttc_stg/media/"
+      "name": "Staging",
+      "host": "219.187.187.203",
+      "user": "freedom",
+      "path": "/srv/media/"
     },
     {
-      "name": "production-blitz",
-      "host": "blitz.tacticaltech.org",
-      "user": "ttc_prd",
-      "path": "/srv/data/ttc_prd/media/"
+      "name": "Production",
+      "host": "219.187.187.223",
+      "user": "holiday",
+      "path": "/srv/media/"
     },
     {
-      "name": "production-lucky",
-      "host": "lucky.tacticaltech.org",
-      "user": "ttc_prd",
-      "path": "/srv/data/ttc_prd/media/"
+      "name": "Local-testing",
+      "host": "10.0.0.3",
+      "user": "minnie",
+      "path": "/gitlab/projects/myproject/media/"
     }
   ]
 }
