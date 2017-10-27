@@ -7,7 +7,10 @@
   "activationCommands": {
     "atom-workspace": "that-syncing-feeling:toggle"
   },
-  "repository": "https://github.com/killapop/that-syncing-feeling.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/killapop/that-syncing-feeling.git"
+  },
   "author": "killapop <allanstanley@riseup.net>",
   "license": "MIT",
   "engines": {
@@ -20,5 +23,16 @@
     "lodash": "^4.17.4",
     "rsync": "^0.6.1",
     "space-pen": "^5.1.2"
+  },
+  "bugs": {
+    "url": "https://github.com/killapop/that-syncing-feeling/issues"
+  },
+  "homepage": "https://github.com/killapop/that-syncing-feeling#readme",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test.js"
   }
 }
