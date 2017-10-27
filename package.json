@@ -1,7 +1,7 @@
 {
   "name": "that-syncing-feeling",
   "main": "./lib/that-syncing-feeling",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "atom plugin to sync folders with remote servers over rsync and ssh",
   "keywords": [],
   "activationCommands": {
