@@ -23,14 +23,13 @@ remotes = conf.remotes
 
 
 runShell = (cmd) ->
-  return new Promise (resolve, reject) ->
-    console.log resolve
-    shell = child_process.execSync(cmd, { encoding: 'utf8'})
-    return parseInt shell
+  shell = child_process.execSync(cmd, { encoding: 'utf8'})
+  return parseInt shell
 
 class RemoteItem extends View
   @content: (remoteState) ->
-    @div class: "remote", outlet: "#{remoteState.name}", =>
+    @div class: "remote", =>
+      @div outlet: 'remoteWrapper'
       @div class: 'details', =>
         @strong remoteState.name
         @em remoteState.host
@@ -39,11 +38,16 @@ class RemoteItem extends View
           @span "check status"
         @button class: "btn btn-success upload", disabled: 'true', title: "upload to #{remoteState.name}", outlet: 'uploadButton', click: 'syncUp', =>
           @span "upload"
+          @span class: 'badge', outlet: 'badgeUp'
         @button class: 'btn btn-warning download', disabled: 'true', title: "download from #{remoteState.name}", outlet: 'downloadButton', click: 'syncDown', =>
           @span "download"
+          @span class: 'badge', outlet: 'badgeDown'
+
 
   initialize: (remoteState) ->
     @remoteState = remoteState
+    @badgeUp.prop 'innerText', '0'
+    @badgeDown.prop 'innerText', '0'
     @destination = "#{@remoteState.user}@#{@remoteState.host}:#{@remoteState.path}"
 
   update: () ->
@@ -52,11 +56,16 @@ class RemoteItem extends View
     return "#{remoteState.user}@#{remoteState.host}:#{remoteState.path}"
 
   checkFiles: () ->
+    @remoteWrapper.toggleClass('loading')
     cmdUp = "rsync -rvnc --delete #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep -v ^delet | wc -l"
     cmdDown = "rsync -rvnc --delete #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}| head -n -3 | tail -n +2 | grep ^delet | wc -l"
-    newState = _.merge(@remoteState, {up: runShell(cmdUp) isnt 0, down: runShell(cmdDown) isnt 0})
-    @downloadButton.prop("disabled", !@remoteState.down)
-    @uploadButton.prop("disabled", !@remoteState.up)
+    _.merge(@remoteState, {up: runShell(cmdUp), down: runShell(cmdDown)})
+    @downloadButton.prop "disabled", @remoteState.down is 0
+    @badgeDown.prop 'innerText', @remoteState.down
+    @uploadButton.prop "disabled", @remoteState.up is 0
+    @badgeUp.prop 'innerText', @remoteState.up
+    @remoteWrapper.toggleClass('loading')
+    return
 
   syncUp: () ->
     cmd = "rsync -au --quiet --partial #{cwd}/#{conf.path} -e ssh #{destinationPath(@remoteState)}"
