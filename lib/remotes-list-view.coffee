@@ -1,24 +1,32 @@
 {View} = require('atom-space-pen-views')
-fs = require('fs')
 path = require('path')
 _ = require('lodash')
 child_process = require('child_process')
+Promise = require('bluebird')
 
+
+fs = Promise.promisifyAll(require('fs-extra'))
 cwd = atom.project.getPaths()[0]
 filePath = path.join cwd, '.that-syncing-feeling.json'
 
-try fs.readFileSync filePath
-catch err
-  e = if err.code == "ENOENT" then "The project does not have a .that-syncing-feeling.json file to define the remotes. Please refer the documentation" else err
-  throw e
-unless err?
-  conf = JSON.parse fs.readFileSync filePath
-  remotes = conf.remotes
+# conf = Promise.resolve(filePath)
+#   .catch atom.notifications.addError("You need to add a config file named .that-syncing-feeling.json to your root. Please see the readme for a sample config file", {dismissable: true, icon: 'x'})
+#   .then fs.readFileSync
+#   .then JSON.parse
+conf = {}
+fs.readFile filePath
+.then (d) =>
+  return _.merge conf, JSON.parse d
+.catch (err) ->
+  atom.notifications.addError("You need to add a config file named .that-syncing-feeling.json to your root. Please see the readme for a sample config file", {dismissable: true, icon: 'x'})
+remotes = conf.remotes
 
 
 runShell = (cmd) ->
-  shell = child_process.execSync(cmd, { encoding: 'utf8'})
-  return parseInt shell
+  return new Promise (resolve, reject) ->
+    console.log resolve
+    shell = child_process.execSync(cmd, { encoding: 'utf8'})
+    return parseInt shell
 
 class RemoteItem extends View
   @content: (remoteState) ->
